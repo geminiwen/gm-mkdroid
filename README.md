@@ -1,4 +1,4 @@
-# An WYSIWYG MarkdownEditor on Android
+# A WYSIWYG MarkdownEditor on Android
 
 Thanks to [MarkdownSyntaxEditor](https://github.com/azu/MarkdownSyntaxEditor)
 
