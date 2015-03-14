@@ -99,7 +99,7 @@ public class MarkdownSyntaxGenerator {
                 return new BackgroundColorSpan(Color.parseColor("#fafafa"));
             }
             case MarkdownSyntaxInlineCode: {
-                return new ForegroundColorSpan(Color.YELLOW);
+                return new ForegroundColorSpan(Color.parseColor("#C2B17A"));
             }
             case MarkdownSyntaxBlockquotes: {
                 return new ForegroundColorSpan(Color.LTGRAY);
