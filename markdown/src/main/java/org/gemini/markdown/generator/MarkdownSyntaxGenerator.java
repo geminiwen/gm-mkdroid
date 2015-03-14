@@ -12,6 +12,7 @@ import android.text.style.StyleSpan;
 import org.gemini.markdown.model.MarkdownSyntaxModel;
 import org.gemini.markdown.model.type.MarkdownSyntaxType;
 import org.gemini.markdown.model.type.Range;
+import org.gemini.markdown.syntax.SyntaxPattern;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,37 +30,37 @@ public class MarkdownSyntaxGenerator {
                 return null;
             }
             case MarkdownSyntaxHeaders: {
-                return Pattern.compile("(#+)(.*)", Pattern.MULTILINE);
+                return SyntaxPattern.MarkdownSyntaxHeaders;
             }
             case MarkdownSyntaxLinks: {
-                return Pattern.compile("\\[([^\\[]+)\\]\\(([^\\)]+)\\)", Pattern.CASE_INSENSITIVE);
+                return SyntaxPattern.MarkdownSyntaxLinks;
             }
             case MarkdownSyntaxBold: {
-                return Pattern.compile("(\\*\\*|__)(.*?)\\1", Pattern.CASE_INSENSITIVE);
+                return SyntaxPattern.MarkdownSyntaxBold;
             }
             case MarkdownSyntaxEmphasis: {
-                return Pattern.compile("\\s(\\*|_)(.*?)\\1\\s", Pattern.CASE_INSENSITIVE);
+                return SyntaxPattern.MarkdownSyntaxEmphasis;
             }
             case MarkdownSyntaxDeletions: {
-                return Pattern.compile("\\~\\~(.*?)\\~\\~", Pattern.CASE_INSENSITIVE);
+                return SyntaxPattern.MarkdownSyntaxDeletions;
             }
             case MarkdownSyntaxQuotes: {
-                return Pattern.compile("\\:\\\"(.*?)\\\"\\:", Pattern.CASE_INSENSITIVE);
-            }
-            case MarkdownSyntaxInlineCode: {
-                return Pattern.compile("`(.*?)`", Pattern.CASE_INSENSITIVE);
+                return SyntaxPattern.MarkdownSyntaxQuotes;
             }
             case MarkdownSyntaxCodeBlock: {
-                return Pattern.compile("```([\\s\\S]*?)```", Pattern.CASE_INSENSITIVE);
+                return SyntaxPattern.MarkdownSyntaxCodeBlock;
+            }
+            case MarkdownSyntaxInlineCode: {
+                return SyntaxPattern.MarkdownSyntaxInlineCode;
             }
             case MarkdownSyntaxBlockquotes: {
-                return Pattern.compile("\n(&gt;|\\>)(.*)", Pattern.CASE_INSENSITIVE);
+                return SyntaxPattern.MarkdownSyntaxBlockquotes;
             }
             case MarkdownSyntaxULLists: {
-                return Pattern.compile("^\\*([^\\*]*)", Pattern.MULTILINE);
+                return SyntaxPattern.MarkdownSyntaxULLists;
             }
             case MarkdownSyntaxOLLists: {
-                return Pattern.compile("^[0-9]+\\.(.*)", Pattern.MULTILINE);
+                return SyntaxPattern.MarkdownSyntaxOLLists;
             }
             case NumberOfMarkdownSyntax: {
                 return null;
@@ -77,7 +78,7 @@ public class MarkdownSyntaxGenerator {
             }
             case MarkdownSyntaxHeaders: {
                 //TODO adjust text size
-                return new AbsoluteSizeSpan(50, true);
+                return new AbsoluteSizeSpan(30, true);
             }
             case MarkdownSyntaxLinks: {
                 return new ForegroundColorSpan(Color.BLUE);
@@ -94,11 +95,11 @@ public class MarkdownSyntaxGenerator {
             case MarkdownSyntaxQuotes: {
                 return new ForegroundColorSpan(Color.LTGRAY);
             }
-            case MarkdownSyntaxInlineCode: {
-                return new ForegroundColorSpan(Color.YELLOW);
-            }
             case MarkdownSyntaxCodeBlock: {
                 return new BackgroundColorSpan(Color.parseColor("#fafafa"));
+            }
+            case MarkdownSyntaxInlineCode: {
+                return new ForegroundColorSpan(Color.YELLOW);
             }
             case MarkdownSyntaxBlockquotes: {
                 return new ForegroundColorSpan(Color.LTGRAY);
@@ -118,6 +119,54 @@ public class MarkdownSyntaxGenerator {
         }
     }
 
+
+    private static int regexGroupFromSyntaxType(MarkdownSyntaxType type) {
+        switch(type) {
+            case MarkdownSyntaxUnknown: {
+                return 0;
+            }
+            case MarkdownSyntaxHeaders: {
+                return 1;
+            }
+            case MarkdownSyntaxLinks: {
+                return 0;
+            }
+            case MarkdownSyntaxBold: {
+                return 0;
+            }
+            case MarkdownSyntaxEmphasis: {
+                return 0;
+            }
+            case MarkdownSyntaxDeletions: {
+                return 0;
+            }
+            case MarkdownSyntaxQuotes: {
+                return 0;
+            }
+            case MarkdownSyntaxCodeBlock: {
+                return 0;
+            }
+            case MarkdownSyntaxInlineCode: {
+                return 0;
+            }
+            case MarkdownSyntaxBlockquotes: {
+                return 0;
+            }
+            case MarkdownSyntaxULLists: {
+                return 0;
+            }
+            case MarkdownSyntaxOLLists: {
+                return 0;
+            }
+            case NumberOfMarkdownSyntax: {
+                return 0;
+            }
+            default: {
+                return 0;
+            }
+        }
+    }
+
     public static List<MarkdownSyntaxModel> syntaxModelsForString(String text) {
         List<MarkdownSyntaxModel> models = new ArrayList<>();
         for (MarkdownSyntaxType type: MarkdownSyntaxType.values()) {
@@ -125,8 +174,9 @@ public class MarkdownSyntaxGenerator {
             if (pattern == null) continue;
             Matcher matcher = pattern.matcher(text);
             while(matcher.find()) {
-                int start = matcher.start();
-                int end = matcher.end();
+                int group = regexGroupFromSyntaxType(type);
+                int start = matcher.start(group);
+                int end = matcher.end(group);
                 MarkdownSyntaxModel model = new MarkdownSyntaxModel(type, new Range(start, end));
                 models.add(model);
             }
