@@ -1,0 +1,42 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <HorizontalScrollView
+        android:id="@+id/mkdroid_fixed_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:background="#f00">
+
+    </HorizontalScrollView>
+
+    <LinearLayout
+        android:id="@+id/mkdroid_suspend_toolbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/mkdroid_fixed_toolbar"
+        android:layout_alignParentRight="true"
+        android:orientation="horizontal"
+        android:background="#0f0">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Title"
+            android:id="@+id/btn_title" />
+
+    </LinearLayout>
+
+    <org.gemini.markdown.view.MarkdownEditText
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/mkdroid_suspend_toolbar"
+        android:hint="请输入注释"
+        android:gravity="top"
+        android:padding="20dp"
+        android:id="@+id/mkdroid_markdown_edit_text"
+        android:background="@null" />
+
+</RelativeLayout>
