@@ -76,7 +76,7 @@ public class MarkdownEditor extends RelativeLayout implements View.OnClickListen
     public void onClick(View v) {
         Editable e =  mEditText.getText();
         if (v == mTitleButton) {
-            insertTitle(e);
+            insertHorizontalLine(e);
         } else if (v == mListButton) {
             insertList(e);
         } else if (v == mCodeBlockButton) {
@@ -87,24 +87,81 @@ public class MarkdownEditor extends RelativeLayout implements View.OnClickListen
 
     private void insertTitle(Editable e) {
         int selectionStart = mEditText.getSelectionStart();
+        int selectionEnd = mEditText.getSelectionEnd();
         final String titleTemplate = "# title";
-        e.insert(selectionStart, titleTemplate);
+        e.replace(selectionStart, selectionEnd, titleTemplate);
         // start from "t", end to "e"
         mEditText.setSelection(selectionStart + 2, selectionStart + 7);
     }
 
     private void insertList(Editable e) {
         int selectionStart = mEditText.getSelectionStart();
+        int selectionEnd = mEditText.getSelectionEnd();
         final String listTemplate = "- List Item";
-        e.insert(selectionStart, listTemplate);
+        e.replace(selectionStart, selectionEnd, listTemplate);
         // start from "L", end to "m"
         mEditText.setSelection(selectionStart + 2, selectionStart + 11);
     }
 
     private void insertCodeBlock(Editable e) {
         int selectionStart = mEditText.getSelectionStart();
+        int selectionEnd = mEditText.getSelectionEnd();
         final String codeBlockTemplate = "```\n\n```";
-        e.insert(selectionStart, codeBlockTemplate);
+        e.replace(selectionStart, selectionEnd, codeBlockTemplate);
+        mEditText.setSelection(selectionStart + 4, selectionStart + 4);
+    }
+
+    private void insertStrong(Editable e) {
+        int selectionStart = mEditText.getSelectionStart();
+        int selectionEnd = mEditText.getSelectionEnd();
+        final String titleTemplate = "**Strong**";
+        e.replace(selectionStart, selectionEnd, titleTemplate);
+        // start from "t", end to "e"
+        mEditText.setSelection(selectionStart + 2, selectionStart + 8);
+    }
+
+    private void insertItalic(Editable e) {
+        int selectionStart = mEditText.getSelectionStart();
+        int selectionEnd = mEditText.getSelectionEnd();
+        final String titleTemplate = "*Italic*";
+        e.replace(selectionStart, selectionEnd, titleTemplate);
+        // start from "t", end to "e"
+        mEditText.setSelection(selectionStart + 1, selectionStart + 7);
+    }
+
+    private void insertBlockquotes(Editable e) {
+        int selectionStart = mEditText.getSelectionStart();
+        int selectionEnd = mEditText.getSelectionEnd();
+        final String titleTemplate = "> ";
+        e.replace(selectionStart, selectionEnd, titleTemplate);
+        // start from "t", end to "e"
+        mEditText.setSelection(selectionStart + 2, selectionStart + 2);
+    }
+
+    private void insertLink(Editable e) {
+        int selectionStart = mEditText.getSelectionStart();
+        int selectionEnd = mEditText.getSelectionEnd();
+        final String titleTemplate = "[链接](http://example)";
+        e.replace(selectionStart, selectionEnd, titleTemplate);
+        // start from "t", end to "e"
+        mEditText.setSelection(selectionStart + 12, selectionStart + 19);
+    }
+
+    private void insertImage(Editable e) {
+        int selectionStart = mEditText.getSelectionStart();
+        int selectionEnd = mEditText.getSelectionEnd();
+        final String titleTemplate = "![Image](http://resource)";
+        e.replace(selectionStart, selectionEnd, titleTemplate);
+        // start from "t", end to "e"
+        mEditText.setSelection(selectionStart + 16, selectionStart + 24);
+    }
+
+    private void insertHorizontalLine(Editable e) {
+        int selectionStart = mEditText.getSelectionStart();
+        int selectionEnd = mEditText.getSelectionEnd();
+        final String titleTemplate = "---\n";
+        e.replace(selectionStart, selectionEnd, titleTemplate);
+        // start from "t", end to "e"
         mEditText.setSelection(selectionStart + 4, selectionStart + 4);
     }
 }

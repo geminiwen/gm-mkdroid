@@ -9,6 +9,7 @@ public enum MarkdownSyntaxType {
     MarkdownSyntaxHeaders,
     MarkdownSyntaxLinks,
     MarkdownSyntaxBold,
+    MarkdownSyntaxItalic,
     MarkdownSyntaxEmphasis,
     MarkdownSyntaxDeletions,
     MarkdownSyntaxQuotes,
