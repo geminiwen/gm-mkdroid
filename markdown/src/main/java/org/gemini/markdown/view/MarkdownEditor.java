@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Build;
+import android.text.Editable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +19,10 @@ import org.gemini.markdown.R;
 public class MarkdownEditor extends RelativeLayout implements View.OnClickListener{
 
     private MarkdownEditText mEditText;
+
     private Button mTitleButton;
+    private Button mListButton;
+    private Button mCodeBlockButton;
 
     public MarkdownEditor(Context context) {
         this(context, null);
@@ -40,8 +44,15 @@ public class MarkdownEditor extends RelativeLayout implements View.OnClickListen
         int layoutId = a.getResourceId(R.styleable.MarkdownEditor_layout, R.layout.mk_editor_layout);
         inflater.inflate(layoutId, this, true);
 
-
         mEditText = (MarkdownEditText)findViewById(R.id.mkdroid_markdown_edit_text);
+
+        mTitleButton = (Button)findViewById(R.id.btn_title);
+        mListButton = (Button)findViewById(R.id.btn_list);
+        mCodeBlockButton = (Button)findViewById(R.id.btn_code_block);
+
+        mTitleButton.setOnClickListener(this);
+        mListButton.setOnClickListener(this);
+        mCodeBlockButton.setOnClickListener(this);
 
         a.recycle();
     }
@@ -58,14 +69,42 @@ public class MarkdownEditor extends RelativeLayout implements View.OnClickListen
         int layoutId = a.getResourceId(R.styleable.MarkdownEditor_layout, R.layout.mk_editor_layout);
         inflater.inflate(layoutId, this, true);
 
-        mTitleButton = (Button)findViewById(R.id.btn_title);
-
-
         a.recycle();
     }
 
     @Override
     public void onClick(View v) {
-        
+        Editable e =  mEditText.getText();
+        if (v == mTitleButton) {
+            insertTitle(e);
+        } else if (v == mListButton) {
+            insertList(e);
+        } else if (v == mCodeBlockButton) {
+            insertCodeBlock(e);
+        }
+
+    }
+
+    private void insertTitle(Editable e) {
+        int selectionStart = mEditText.getSelectionStart();
+        final String titleTemplate = "# title";
+        e.insert(selectionStart, titleTemplate);
+        // start from "t", end to "e"
+        mEditText.setSelection(selectionStart + 2, selectionStart + 7);
+    }
+
+    private void insertList(Editable e) {
+        int selectionStart = mEditText.getSelectionStart();
+        final String listTemplate = "- List Item";
+        e.insert(selectionStart, listTemplate);
+        // start from "L", end to "m"
+        mEditText.setSelection(selectionStart + 2, selectionStart + 11);
+    }
+
+    private void insertCodeBlock(Editable e) {
+        int selectionStart = mEditText.getSelectionStart();
+        final String codeBlockTemplate = "```\n\n```";
+        e.insert(selectionStart, codeBlockTemplate);
+        mEditText.setSelection(selectionStart + 4, selectionStart + 4);
     }
 }
